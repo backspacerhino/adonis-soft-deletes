@@ -6,17 +6,12 @@ This package allows you to soft delete entries in the DB meaning that they will 
 
 ## Installation
 
-Make sure to install it using [`adonis-cli`](https://github.com/adonisjs/adonis-cli), `npm` or `yarn`.
+Make sure to install it using `npm` ( `yarn` doesn't work at the moment).
 
 ```bash
-# adonis
-adonis install @backspacerhino/soft-deletes
-
 # npm
 npm i @backspacerhino/soft-deletes
 
-# yarn
-yarn add @backspacerhino/soft-deletes
 ```
 
 ## Provider registration
