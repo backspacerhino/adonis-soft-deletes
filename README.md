@@ -24,6 +24,35 @@ const providers = [
 ]
 ```
 
+## Setup
+
+
+Inside your `boot()` method in model
+
+```js
+const Model = use('Model')
+
+class Post extends Model {
+  static boot () {
+    super.boot()
+    this.addTrait('@provider:SoftDeletes')
+  }
+}
+```
+
+you can change fieldName using additional argument to use `time_of_deletion` instead default value of `deleted_at`
+
+```js
+const Model = use('Model')
+
+class Post extends Model {
+  static boot () {
+    super.boot()
+    this.addTrait('@provider:SoftDeletes', {fieldName: "time_of_deletion" })
+  }
+}
+```
+
 ## Usage
 
 ### Model instance
