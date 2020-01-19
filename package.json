@@ -1,6 +1,6 @@
 {
   "name": "@backspacerhino/soft-deletes",
-  "version": "1.0.8",
+  "version": "1.0.9",
   "description": "Basic implementation for soft deletes in AdonisJS",
   "main": "src/SoftDeletes/index.js",
   "scripts": {
