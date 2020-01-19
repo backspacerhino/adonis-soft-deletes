@@ -14,8 +14,8 @@ class SoftDeletes {
     let runtimeOptions = options;
 
     Model.prototype.softDelete = async function () {
-      if (!this.isSoftDeleted()) {
-        this.deleted_at = new Date();
+      if (!this.isSoftDeleted()) {       
+        this.deleted_at = Model.formatDates(`${options.fieldName}`, new Date());
         await this.save();
         this.freeze();
       }
