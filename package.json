@@ -23,10 +23,13 @@
     "@adonisjs/lucid": "^6.1.3",
     "@adonisjs/sink": "^1.0.17",
     "japa": "^3.0.1",
-    "sqlite3": "^4.1.1",
-    "knex": "^0.19.5"
+    "knex": "^0.19.5",
+    "sqlite3": "^4.1.1"
   },
   "directories": {
     "test": "test"
+  },
+  "dependencies": {
+    "@backspacerhino/soft-deletes": "^1.1.2"
   }
 }
