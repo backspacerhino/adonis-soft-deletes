@@ -3,7 +3,7 @@ const { ServiceProvider } = require('@adonisjs/fold')
 class SoftDeletesProvider extends ServiceProvider {
   register () {
     this.app.bind('Adonis/Addons/SoftDeletes', () => {
-      return new (require('../src/SoftDeletes'))()
+      return new (require('../src/Traits'))()
     })
     this.app.alias('Adonis/Addons/SoftDeletes', 'SoftDeletes')
   }
