@@ -15,7 +15,7 @@ class SoftDeletes {
 
     Model.prototype.softDelete = async function () {
       if (!this.isSoftDeleted()) {
-        this.deleted_at = this.formatDates(`${options.fieldName}`, new Date());
+        this.deleted_at = new Date();
         await this.save();
         this.freeze();
       }

@@ -11,7 +11,7 @@
 
 const test = require('japa')
 const { ioc } = require('@adonisjs/fold')
-const SoftDeletes = require('../src/SoftDeletes')
+const SoftDeletes = require('../src/Traits')
 const setup = require('./helpers/setup')
 
 
