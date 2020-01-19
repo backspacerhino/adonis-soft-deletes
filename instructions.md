@@ -25,4 +25,4 @@ class Post extends Model {
 
 ## DB Schema
 
-Make sure, that your models table has `deleted_at` datetime column.
+Make sure that your models' table has `deleted_at` datetime column.

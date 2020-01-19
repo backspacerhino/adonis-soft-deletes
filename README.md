@@ -53,6 +53,8 @@ class Post extends Model {
 }
 ```
 
+> NOTE: Make sure that your models' table has `deleted_at` datetime column (or whatever your *fieldName* name is)  
+
 ## Usage
 
 ### Model instance
