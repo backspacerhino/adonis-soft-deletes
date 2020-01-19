@@ -49,7 +49,7 @@ class SoftDeletes {
 
     Model.queryMacro('softDelete', async function () {
       let updateObj = {}
-      updateObj[options.fieldName] = this.Model.formatDates(`${options.fieldName}`, new Date())
+      updateObj[options.fieldName] = Model.formatDates(`${options.fieldName}`, new Date())
       if (this.$relation) {
         return await this.update(updateObj)
       }
