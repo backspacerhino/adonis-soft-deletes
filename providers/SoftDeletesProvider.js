@@ -1,3 +1,5 @@
+const { ServiceProvider } = require('@adonisjs/fold')
+
 class SoftDeletesProvider extends ServiceProvider {
   register () {
     this.app.bind('Adonis/Addons/SoftDeletes', () => {

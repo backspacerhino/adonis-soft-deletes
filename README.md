@@ -111,3 +111,24 @@ When we want to restore using query
  .restore()
  ...
 ```
+
+### Relationships
+
+> NOTE: Because of current limitaitons of Lucid we **DON'T** use *await*
+
+When we want to soft delete
+
+```js
+ ...
+ // notice await is missing
+  ownerUser.cars().whereTrashed({ isTrashed: false }).softDelete();
+ ...
+```
+When we want to restore
+
+```js
+ ...
+ // notice await is missing
+  ownerUser.cars().whereTrashed({ isTrashed: true }).restore();
+ ...
+```
