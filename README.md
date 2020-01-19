@@ -20,7 +20,7 @@ Make sure to register the provider inside `start/app.js` file.
 
 ```js
 const providers = [
-  'adonis-soft-deletes/providers/SoftDeletesProvider'
+  '@backspacerhino/soft-deletes/providers/SoftDeletesProvider'
 ]
 ```
 
@@ -28,7 +28,7 @@ const providers = [
 
 ### Model instance
 
-> NOTE: Upon softDelete/restore we change the $frozen property.
+> NOTE: Upon softDelete/restore we change the __*$frozen*__ property.
 
 When we want to soft delete a model instance
 
@@ -64,7 +64,7 @@ Check if model instance is soft deleted
 
 > NOTE: Please use _**whereTrashed()**_ when making changes otherwise you will fetch/change all inserted values, both soft deleted and those that are not
 
-> NOTE: Upon softDelete/restore we **DO NOT** change the $frozen property
+> NOTE: Upon softDelete/restore we **DO NOT** change the __*$frozen*__ property
 
 *If you know how to change $frozen property in query please let me know*
 
@@ -75,6 +75,17 @@ When we want to soft delete using query
  await User.query()
  .where('country_id', 4)
  .whereTrashed({ isTrashed:false }) // This makes sure we get only non soft deleted
+ .softDelete()
+ ...
+```
+
+When we want to soft delete using query with different *tableName*
+
+```js
+ ...
+ await User.query()
+ .where('country_id', 4)
+ .whereTrashed({ isTrashed:false, tableName: 'users' })
  .softDelete()
  ...
 ```

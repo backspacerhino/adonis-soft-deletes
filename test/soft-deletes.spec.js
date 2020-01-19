@@ -26,8 +26,8 @@ test.group('Soft deletes', group => {
         User._bootIfNotBooted();
         Car._bootIfNotBooted();
     });
-    group.beforeEach(async () => {     
-        
+    group.beforeEach(async () => {
+
         ownerUser = new User();
         ownerUser.fill({ username: 'Owner', email: 'owner@test.com', password: "owner", deleted_at: null })
         await ownerUser.save();
@@ -40,7 +40,7 @@ test.group('Soft deletes', group => {
             { name: 'First', deleted_at: null },
             { name: 'Second', deleted_at: null },
             { name: 'Third', deleted_at: null }
-        ])        
+        ])
     })
     group.afterEach(async () => {
         await User.query().where('id', '>', 0).delete();
@@ -148,8 +148,24 @@ test.group('Soft deletes', group => {
     test("'restore' in query soft restores", async (assert) => {
         await Car.query().whereTrashed({ isTrashed: false }).softDelete();
         await Car.query().whereTrashed({ isTrashed: true }).restore();
-        let cars = await Car.query().whereTrashed({ isTrashed: false }).fetch();     
+        let cars = await Car.query().whereTrashed({ isTrashed: false }).fetch();
+        cars = cars.toJSON()
+        assert.strictEqual(cars.length, 3)
+    })
+
+    test("relationship 'softDelete' works", async (assert) => {
+        ownerUser.cars().whereTrashed({ isTrashed: false }).softDelete();
+        let cars = await ownerUser.cars().fetch();
+        cars = cars.toJSON()
+        assert.strictEqual(cars.length, 3)
+    })
+
+    test("relationship 'restore' works", async (assert) => {
+        ownerUser.cars().whereTrashed({ isTrashed: true }).restore();
+        let cars = await ownerUser.cars().whereTrashed({ isTrashed: false }).fetch();
         cars = cars.toJSON()
         assert.strictEqual(cars.length, 3)
     })
 })
+
+
