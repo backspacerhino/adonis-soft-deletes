@@ -165,3 +165,7 @@ When we want to restore
   ownerUser.cars().whereTrashed({ isTrashed: true }).restore();
  ...
 ```
+# Thanks
+Special thanks to the creator(s) of [AdonisJS][AdonisJS] for creating such a great framework.
+
+[AdonisJS]: http://adonisjs.com/

@@ -11,7 +11,6 @@ class SoftDeletes {
   register(Model, customOptions = {}) {
     const defaultOptions = { fieldName: "deleted_at" }
     const options = Object.assign(defaultOptions, customOptions)
-    let runtimeOptions = options;
 
     Model.prototype.softDelete = async function () {
       if (!this.isSoftDeleted()) {       
@@ -34,8 +33,6 @@ class SoftDeletes {
     }
 
     Model.queryMacro('whereTrashed', function ({ isTrashed = true, tableName = this.Model.table }) {
-
-      runtimeOptions.tableName = tableName
 
       if (isTrashed) {
         this.whereNotNull(`${tableName}.${options.fieldName}`)
@@ -64,9 +61,7 @@ class SoftDeletes {
         return await this.update(updateObj)
       }
       return this.update(updateObj)
-
     })
-
   }
 }
 
