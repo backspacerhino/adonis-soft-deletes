@@ -14,7 +14,7 @@ class SoftDeletes {
 
     Model.prototype.softDelete = async function () {
       if (!this.isSoftDeleted()) {       
-        this.deleted_at = Model.formatDates(`${options.fieldName}`, new Date());
+        this[options.fieldName] = Model.formatDates(`${options.fieldName}`, new Date());
         await this.save();
         this.freeze();
       }
@@ -23,13 +23,13 @@ class SoftDeletes {
     Model.prototype.restore = async function () {
       if (this.isSoftDeleted()) {
         this.unfreeze();
-        this.deleted_at = null;
+        this[options.fieldName] = null;
         await this.save();
       }
     }
 
     Model.prototype.isSoftDeleted = function () {
-      return this.deleted_at != null;
+      return this[options.fieldName] != null;
     }
 
     Model.queryMacro('whereTrashed', function ({ isTrashed = true, tableName = this.Model.table }) {
