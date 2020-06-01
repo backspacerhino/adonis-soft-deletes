@@ -93,7 +93,7 @@ test.group('Soft deletes', group => {
         let car = await Car.findBy('name', 'First');
         await car.forceDelete()
         console.log(await Car.findBy('name', 'First'));
-        
+
         car = await Car.findBy('name', 'First');
         assert.equal(car, null)
     })
@@ -150,17 +150,19 @@ test.group('Soft deletes', group => {
         assert.strictEqual(carsCount, count)
     })
 
-    // test("Napravit test za one posebne stvari ka .with() i sl", async (assert) => {
-    //      await ownerUser.cars().where("name","First").delete();
-    //     //  console.log(await Car.query().withTrashed().fetch());
-         
-    //     const user = await User.query().with("cars", (builder) => {
-    //        return  builder.whereNotNull("deleted_at")
-    //     }).first()
-    //     console.log(await user.cars().fetch());
+    test(" special queries work with with() relation", async (assert) => {
+        await ownerUser.cars().where("name", "First").delete();
+        const count = await Car.query().withTrashed().getCount();
+
+        const user = await User.query().with("cars", (builder) => {
+            builder.withTrashed()
+        }).first()
+
+        const withCount = user.getRelated("cars");
         
-          
-    // })
+        assert.equal(count, withCount.rows.length)
+
+    })
 
 
     test("isSoftDeleted returns true if is soft deleted", async (assert) => {

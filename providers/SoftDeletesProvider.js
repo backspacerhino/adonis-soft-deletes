@@ -10,14 +10,24 @@
 */
 
 const { ServiceProvider } = require('@adonisjs/fold')
+const BaseRelation = require("@adonisjs/lucid/src/Lucid/Relations/BaseRelation")
 
 class SoftDeletesProvider extends ServiceProvider {
-  register () {    
+  register() {    
+    console.log("REGISTER");
+    
+    BaseRelation.methodList.push(...['forceDelete','restore','withTrashed', "onlyTrashed"])
     this.app.bind('Adonis/Addons/SoftDeletes', () => {
+      console.log("TEST");
+      
       return new (require('../src/Traits'))()
     })
 
     this.app.alias('Adonis/Addons/SoftDeletes', 'SoftDeletes')
+  }
+
+  boot(){
+    console.log("TEST")
   }
 }
 
