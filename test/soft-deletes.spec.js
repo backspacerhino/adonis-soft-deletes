@@ -3,11 +3,7 @@
 /**
  * adonis-soft-deletes
  *
-<<<<<<< HEAD
- * (c) Mario Ercegovac <helpereiden@gmail.com>
-=======
  * (c) BackspaceRhino
->>>>>>> origin/v2
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -20,24 +16,15 @@ const setup = require('./helpers/setup')
 
 
 test.group('Soft deletes', group => {
-<<<<<<< HEAD
-    let User, Car, ownerUser, nonownerUser;
-=======
     let User, Car, TestModel, ownerUser, nonownerUser;
->>>>>>> origin/v2
     group.before(async () => {
         await setup.up()
         ioc.bind('SoftDeletes', () => new SoftDeletes())
         User = require('./models/User')
         Car = require('./models/Car')
-<<<<<<< HEAD
-
-        User._bootIfNotBooted();
-=======
         TestModel = require('./models/TestModel')
         User._bootIfNotBooted();
         TestModel._bootIfNotBooted();
->>>>>>> origin/v2
         Car._bootIfNotBooted();
     });
     group.beforeEach(async () => {
@@ -57,25 +44,16 @@ test.group('Soft deletes', group => {
         ])
     })
     group.afterEach(async () => {
-<<<<<<< HEAD
-        await User.query().where('id', '>', 0).delete();
-        await Car.query().where('id', '>', 0).delete();
-=======
         await User.query().withTrashed().where('id', '>', 0).forceDelete();
         await Car.query().withTrashed().where('id', '>', 0).forceDelete();
         await TestModel.query().withTrashed().where('id', '>', 0).forceDelete();
->>>>>>> origin/v2
     })
 
     group.after(async () => {
         await setup.down()
     })
 
-<<<<<<< HEAD
-    test("'whereTrashed' method exists when SoftDeletes trait added", (assert) => {
-=======
     test("'withTrashed' method exists when SoftDeletes trait added", (assert) => {
->>>>>>> origin/v2
         const Model = use('Model')
         class TestModel extends Model {
             static boot() {
@@ -85,17 +63,10 @@ test.group('Soft deletes', group => {
         }
         TestModel._bootIfNotBooted()
 
-<<<<<<< HEAD
-        assert.instanceOf(TestModel.query().whereTrashed({}), TestModel.QueryBuilder)
-    })
-
-    test("changed 'fieldName' name in 'whereTrashed' using addTrait", async (assert) => {
-=======
         assert.instanceOf(TestModel.query().withTrashed(), TestModel.QueryBuilder)
     })
 
     test("Changed 'fieldName' to 'test' for trait adding", async (assert) => {
->>>>>>> origin/v2
         const Model = use('Model')
         class TestModel extends Model {
             static boot() {
@@ -105,23 +76,6 @@ test.group('Soft deletes', group => {
         }
         TestModel._bootIfNotBooted()
 
-<<<<<<< HEAD
-        let sqlObj = await TestModel.query().whereTrashed({}).toSQL();
-        let rawSQL = sqlObj.sql;
-
-        assert.strictEqual(rawSQL, "select * from `test_models` where `test_models`.`test` is not null")
-    })
-
-    test("'deleted_at' set to datetime value upon softDelete", async (assert) => {
-        let car = await Car.findBy('name', 'First');
-        await car.softDelete();
-        assert.notStrictEqual(car.deleted_at, null)
-    })
-
-    test("'deleted_at' set to null value upon restore", async (assert) => {
-        let car = await Car.findBy('name', 'First');
-        await car.softDelete();
-=======
         let sqlObj = await TestModel.query().onlyTrashed().toSQL();
         let rawSQL = sqlObj.sql;
 
@@ -145,89 +99,10 @@ test.group('Soft deletes', group => {
     test("row is restored upon restore", async (assert) => {
         let car = await Car.findBy('name', 'First');
         await car.delete();
->>>>>>> origin/v2
         await car.restore()
         assert.strictEqual(car.deleted_at, null)
     })
 
-<<<<<<< HEAD
-    test("isSoftDeleted returns true if is soft deleted", async (assert) => {
-        let car = await Car.findBy('name', 'First');
-        await car.softDelete();
-        assert.strictEqual(car.isSoftDeleted(), true)
-    })
-
-    test("isSoftDeleted returns false if is soft deleted", async (assert) => {
-        let car = await Car.findBy('name', 'First');
-        await car.softDelete();
-        await car.restore()
-        assert.strictEqual(car.isSoftDeleted(), false)
-    })
-
-    test("'whereTrashed' can return only trashed items", async (assert) => {
-        let car = await Car.findBy('name', 'Second');
-        await car.softDelete();
-
-        let cars = await Car.query().whereTrashed({ isTrashed: true }).fetch()
-        let carsSecond = await Car.query().whereTrashed({}).fetch()
-        let carsJSON = cars.toJSON()
-        assert.strictEqual(carsJSON.length, 1)
-        assert.deepEqual(cars.toJSON(), carsSecond.toJSON())
-        assert.strictEqual(carsJSON[0].name, "Second")
-    })
-
-    test("'whereTrashed' can return only non trashed items", async (assert) => {
-        let car = await Car.findBy('name', 'First');
-        await car.softDelete();
-        car = await Car.findBy('name', 'Third');
-        await car.softDelete();
-
-        let cars = await Car.query().whereTrashed({ isTrashed: false }).fetch()
-        cars = cars.toJSON()
-        assert.strictEqual(cars.length, 1)
-        assert.strictEqual(cars[0].name, "Second")
-    })
-
-    test("changed 'tableName' name in 'whereTrashed'", async (assert) => {
-
-        let sqlObj = await Car.query().whereTrashed({ tableName: "test" }).toSQL();
-        let rawSQL = sqlObj.sql;
-
-        assert.strictEqual(rawSQL, "select * from `cars` where `test`.`deleted_at` is not null")
-    })
-
-    test("'softDelete' in query soft deletes", async (assert) => {
-        await Car.query().whereTrashed({ isTrashed: false }).softDelete();
-        let cars = await Car.query().whereTrashed({ isTrashed: true }).fetch();
-        cars = cars.toJSON()
-        assert.strictEqual(cars.length, 3)
-    })
-
-    test("'restore' in query soft restores", async (assert) => {
-        await Car.query().whereTrashed({ isTrashed: false }).softDelete();
-        await Car.query().whereTrashed({ isTrashed: true }).restore();
-        let cars = await Car.query().whereTrashed({ isTrashed: false }).fetch();
-        cars = cars.toJSON()
-        assert.strictEqual(cars.length, 3)
-    })
-
-    test("relationship 'softDelete' works", async (assert) => {
-        ownerUser.cars().whereTrashed({ isTrashed: false }).softDelete();
-        let cars = await ownerUser.cars().fetch();
-        cars = cars.toJSON()
-        assert.strictEqual(cars.length, 3)
-    })
-
-    test("relationship 'restore' works", async (assert) => {
-        ownerUser.cars().whereTrashed({ isTrashed: true }).restore();
-        let cars = await ownerUser.cars().whereTrashed({ isTrashed: false }).fetch();
-        cars = cars.toJSON()
-        assert.strictEqual(cars.length, 3)
-    })
-})
-
-
-=======
     test("rows are soft deleted upon delete", async (assert) => {
         await Car.query().delete();
 
@@ -472,4 +347,3 @@ test.group('Soft deletes', group => {
         assert.deepEqual(cars.toJSON(), carsSecond.toJSON())
     })
 })
->>>>>>> origin/v2

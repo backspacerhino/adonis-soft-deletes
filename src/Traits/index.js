@@ -11,21 +11,13 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
 */
-<<<<<<< HEAD
-class SoftDeletes {
-=======
 
 class SoftDeletes {
 
->>>>>>> origin/v2
   register(Model, customOptions = {}) {
     const defaultOptions = { fieldName: "deleted_at" }
     const options = Object.assign(defaultOptions, customOptions)
 
-<<<<<<< HEAD
-    Model.prototype.softDelete = async function () {
-      if (!this.isSoftDeleted()) {       
-=======
     Model.$hooks.before._events.push("softdelete")
     Model.$hooks.after._events.push("softdelete")
 
@@ -38,17 +30,10 @@ class SoftDeletes {
       await Model.$hooks.before.exec('softdelete', this)
 
       if (!(await this.isSoftDeleted())) {
->>>>>>> origin/v2
         this[options.fieldName] = Model.formatDates(`${options.fieldName}`, new Date());
         await this.save();
         this.freeze();
       }
-<<<<<<< HEAD
-    }
-
-    Model.prototype.restore = async function () {
-      if (this.isSoftDeleted()) {
-=======
 
       await Model.$hooks.after.exec('softdelete', this)
       return true
@@ -82,48 +67,10 @@ class SoftDeletes {
 
       await Model.$hooks.before.exec('restore', this)
       if (await this.isSoftDeleted()) {
->>>>>>> origin/v2
         this.unfreeze();
         this[options.fieldName] = null;
         await this.save();
       }
-<<<<<<< HEAD
-    }
-
-    Model.prototype.isSoftDeleted = function () {
-      return this[options.fieldName] != null;
-    }
-
-    Model.queryMacro('whereTrashed', function ({ isTrashed = true, tableName = this.Model.table }) {
-
-      if (isTrashed) {
-        this.whereNotNull(`${tableName}.${options.fieldName}`)
-      }
-      else {
-        this.whereNull(`${tableName}.${options.fieldName}`)
-      }
-
-      return this
-    })
-
-    Model.queryMacro('softDelete', async function () {
-      let updateObj = {}
-      updateObj[options.fieldName] = Model.formatDates(`${options.fieldName}`, new Date())
-      if (this.$relation) {
-        return await this.update(updateObj)
-      }
-      return this.update(updateObj)
-    })
-
-    Model.queryMacro('restore', async function () {
-      let updateObj = {}
-      updateObj[options.fieldName] = null
-
-      if (this.$relation) {
-        return await this.update(updateObj)
-      }
-      return this.update(updateObj)
-=======
       await Model.$hooks.after.exec('restore', this)
 
     }
@@ -188,7 +135,6 @@ class SoftDeletes {
         await Model.$hooks.after.exec('restore', modelInstances)
       }
       return true
->>>>>>> origin/v2
     })
   }
 }

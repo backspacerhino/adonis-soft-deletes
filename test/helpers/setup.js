@@ -3,11 +3,7 @@
 /**
  * adonis-soft-deletes
  *
-<<<<<<< HEAD
- * (c) Mario Ercegovac <helpereiden@gmail.com>
-=======
  * (c) BackspaceRhino
->>>>>>> origin/v2
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -38,12 +34,8 @@ module.exports = {
 
     return registrar
       .providers([
-<<<<<<< HEAD
-        '@adonisjs/lucid/providers/LucidProvider'
-=======
         '@adonisjs/lucid/providers/LucidProvider',
         '@backspacerhino/soft-deletes/providers/SoftDeletesProvider'
->>>>>>> origin/v2
       ])
       .registerAndBoot()
       .then(() => {
@@ -51,13 +43,8 @@ module.exports = {
 
         schema.createTable('users', (table) => {
           table.increments()
-<<<<<<< HEAD
-          table.string('username').unique()
-          table.string('email').unique()
-=======
           table.string('username')
           table.string('email')
->>>>>>> origin/v2
           table.string('password')
           table.datetime('deleted_at').nullable().defaultTo(null)
           table.timestamps()
@@ -73,15 +60,12 @@ module.exports = {
           table.foreign('user_id').references('id').inTable('users').onDelete('CASCADE')
         })
 
-<<<<<<< HEAD
-=======
         schema.createTable('test_models', (table) => {
           table.increments()
           table.datetime('deleted_at').nullable().defaultTo(null)
           table.timestamps()
         })
 
->>>>>>> origin/v2
         return schema
       })
   },
@@ -92,9 +76,6 @@ module.exports = {
       .schema
       .dropTable('users')
       .dropTable('cars')
-<<<<<<< HEAD
-=======
       .dropTable('test_models')
->>>>>>> origin/v2
   }
 }

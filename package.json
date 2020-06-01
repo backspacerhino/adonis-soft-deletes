@@ -1,10 +1,6 @@
 {
   "name": "@backspacerhino/soft-deletes",
-<<<<<<< HEAD
-  "version": "1.2.0",
-=======
   "version": "2.1.0",
->>>>>>> origin/v2
   "description": "Basic implementation for soft deletes in AdonisJS",
   "main": "src/SoftDeletes/index.js",
   "scripts": {
@@ -19,11 +15,7 @@
     "type": "git",
     "url": "https://github.com/backspacerhino/adonis-soft-deletes.git"
   },
-<<<<<<< HEAD
-  "author": "Mario Ercegovac <helpereiden@gmail.com>",
-=======
   "author": "BackspaceRhino",
->>>>>>> origin/v2
   "license": "MIT",
   "devDependencies": {
     "@adonisjs/ace": "^5.0.8",
@@ -36,11 +28,8 @@
   },
   "directories": {
     "test": "test"
-<<<<<<< HEAD
-=======
   },
   "autoload": {
     "App": "./test"
->>>>>>> origin/v2
   }
 }
