@@ -177,6 +177,16 @@ When we want to restore using query
  ...
 ```
 
+When we want to force delete using query
+
+```js
+ ...
+ await User.query()
+ .where('country_id', 4)
+ .forceDelete()
+ ...
+```
+
 When we want to fetch non trashed users
 
 ```js
@@ -204,14 +214,14 @@ When we want to fetch only trashed users
 
 ### Relationships
 
-When we want to soft delete
+When we want to soft delete relations
 
 ```js
  ...
  await ownerUser.cars().delete();
  ...
 ```
-When we want to restore
+When we want to restore relations
 
 ```js
  ...
