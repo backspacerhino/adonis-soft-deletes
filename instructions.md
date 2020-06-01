@@ -18,7 +18,6 @@ const Model = use('Model')
 class Post extends Model {
   static boot () {
     super.boot()
-
     this.addTrait('@provider:SoftDeletes')
   }
 }
@@ -26,4 +25,4 @@ class Post extends Model {
 
 ## DB Schema
 
-Make sure, that your models table has `deleted_at` datetime column.
+Make sure that your models' table has `deleted_at` datetime column.

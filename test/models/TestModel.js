@@ -8,17 +8,12 @@
  * file that was distributed with this source code.
 */
 const Model = use('Model')
-const Car = use('./Car')
 
-class User extends Model {
+class TestModel extends Model {
   static boot() {
     super.boot()
     this.addTrait('@provider:SoftDeletes')
   }
-
-  cars() {
-    return this.hasMany(Car)
-  }
 }
 
-module.exports = User
+module.exports = TestModel
