@@ -25,7 +25,7 @@ class SoftDeletes {
     Model.prototype.delete = async function () {
       await Model.$hooks.before.exec('softdelete', this)
 
-      if (!this.isSoftDeleted()) {
+      if (!(await this.isSoftDeleted())) {
         this[options.fieldName] = Model.formatDates(`${options.fieldName}`, new Date());
         await this.save();
         this.freeze();
@@ -62,7 +62,7 @@ class SoftDeletes {
     Model.prototype.restore = async function () {
 
       await Model.$hooks.before.exec('restore', this)
-      if (this.isSoftDeleted()) {
+      if (await this.isSoftDeleted()) {
         this.unfreeze();
         this[options.fieldName] = null;
         await this.save();
@@ -71,7 +71,7 @@ class SoftDeletes {
 
     }
 
-    Model.prototype.isSoftDeleted = function () {
+    Model.prototype.isSoftDeleted = async function () {
       return this[options.fieldName] != null;
     }
 

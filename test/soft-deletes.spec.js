@@ -92,8 +92,6 @@ test.group('Soft deletes', group => {
     test("row is deleted upon force delete", async (assert) => {
         let car = await Car.findBy('name', 'First');
         await car.forceDelete()
-        console.log(await Car.findBy('name', 'First'));
-
         car = await Car.findBy('name', 'First');
         assert.equal(car, null)
     })
@@ -167,7 +165,7 @@ test.group('Soft deletes', group => {
     test("isSoftDeleted returns true if is soft deleted", async (assert) => {
         let car = await Car.findBy('name', 'First');
         await car.delete();
-        assert.strictEqual(car.isSoftDeleted(), true)
+        assert.strictEqual(await car.isSoftDeleted(), true)
     })
 
     test("softDelete hook before model delete", async (assert) => {
