@@ -14,12 +14,7 @@ const BaseRelation = require("@adonisjs/lucid/src/Lucid/Relations/BaseRelation")
 
 class SoftDeletesProvider extends ServiceProvider {
   register() {    
-    console.log("REGISTER");
-    
-    BaseRelation.methodList.push(...['forceDelete','restore','withTrashed', "onlyTrashed"])
-    this.app.bind('Adonis/Addons/SoftDeletes', () => {
-      console.log("TEST");
-      
+    this.app.bind('Adonis/Addons/SoftDeletes', () => {      
       return new (require('../src/Traits'))()
     })
 
@@ -27,7 +22,15 @@ class SoftDeletesProvider extends ServiceProvider {
   }
 
   boot(){
-    console.log("TEST")
+    // This is needed for query functions to work on relations  (ex.   user.cars().where("foo","bar").restore())
+    const methodsList = ['forceDelete', 'restore', 'withTrashed', "onlyTrashed"]
+    methodsList.forEach((method) => {
+      BaseRelation.prototype[method] = function (...args) {
+        this._validateRead()
+        this._decorateQuery()
+        return this.relatedQuery[method](...args)
+      }
+    })
   }
 }
 

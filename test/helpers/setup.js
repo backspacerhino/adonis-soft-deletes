@@ -34,7 +34,8 @@ module.exports = {
 
     return registrar
       .providers([
-        '@adonisjs/lucid/providers/LucidProvider'
+        '@adonisjs/lucid/providers/LucidProvider',
+        '@backspacerhino/soft-deletes/providers/SoftDeletesProvider'
       ])
       .registerAndBoot()
       .then(() => {

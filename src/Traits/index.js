@@ -120,6 +120,8 @@ class SoftDeletes {
         await Model.$hooks.before.exec('restore', modelInstances)
       }
 
+      
+
       let updateObj = {}
       updateObj[options.fieldName] = null
 

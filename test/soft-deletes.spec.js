@@ -136,7 +136,6 @@ test.group('Soft deletes', group => {
     })
 
     test("relationship rows are deleted upon force delete", async (assert) => {
-        // await ownerUser.cars().where("name","test").forceDelete();        
         await ownerUser.cars().forceDelete();
         let carsCount = await ownerUser.cars().withTrashed().getCount()
         assert.strictEqual(carsCount, 0)
@@ -350,5 +349,3 @@ test.group('Soft deletes', group => {
         assert.deepEqual(cars.toJSON(), carsSecond.toJSON())
     })
 })
-
-
