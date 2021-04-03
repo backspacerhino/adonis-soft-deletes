@@ -1,6 +1,21 @@
 # Adonis Soft Deletes
 
-### This is for Adonis v4.*
+## Notes (PLEASE READ)
+
+- This is for Adonis v4.x
+- I'll try to recreate this package for Adonis v5 as well
+
+## Breaking changes from version 2.x.x
+
+- It is needed to define .withTrashed()/.onlyTrashed() before using .restore()
+
+
+## Notable changes from version 2.x.x
+
+- Every query has been changed to use _tableName.fieldName_ format instead of just _fieldName_ due to ambiguous field errors
+- Package now works with manyThrough relations
+- Due to core Adonis changes 2 tests are failing but are still working as intended 
+
 
 ## Introduction
 This package allows you to soft delete entries in the DB meaning that they will still be there but will have 'deleted_at' set to some value and as such 'deleted'
@@ -45,7 +60,26 @@ class Post extends Model {
 }
 ```
 
-you can change fieldName using additional argument to use `time_of_deletion` instead default value of `deleted_at`
+### Options
+
+**tableName**
+
+Type: string
+
+Description: If you need to define table name before a field name
+
+Default: Whatever the table name is
+
+**fieldName**
+
+Type: string
+
+Description: If you need to define field name to use when deleting
+
+Default: "deleted_at"
+
+
+# Usage
 
 ```js
 const Model = use('Model')
@@ -59,8 +93,6 @@ class Post extends Model {
 ```
 
 > NOTE: Make sure that your model table has `deleted_at` datetime column (or whatever your *fieldName* name is)  
-
-# Usage
 
 > NOTE: If the model has this trait, upon delete() we will soft delete, if you want to delete then call forceDelete()
 
@@ -129,7 +161,7 @@ When we want to restore a model instance
 
 ```js
  ...
- let user = await User.find(1)
+ let user = await User.query().withTrashed().where("id",1).first()
  await user.restore()
  ...
 ```
@@ -147,7 +179,7 @@ Check if model instance is soft deleted
 
 ```js
  ...
- let user = await User.find(1)
+ let user = await User.query().withTrashed().where("id",1).first()
  let isSoftDeleted = await user.isSoftDeleted()
  ...
 ```
@@ -173,6 +205,7 @@ When we want to restore using query
  ...
  await User.query()
  .where('country_id', 4)
+ .onlyTrashed()
  .restore()
  ...
 ```
@@ -225,7 +258,7 @@ When we want to restore relations
 
 ```js
  ...
- await  ownerUser.cars().restore();
+ await  ownerUser.cars().onlyTrashed().restore();
  ...
 ```
 
@@ -252,6 +285,28 @@ When we want to get onlyTrashed relations
 ```js
  ...
  await  ownerUser.cars().onlyTrashed().fetch();
+ ...
+```
+
+
+## manyThrough relations
+
+There are some additional things required for use with manyThrough
+
+If you have updated_at timestamp available for Model then you need to redefine updatedAtColumn to be _tableName.fieldName_
+
+```js
+ ...
+class User extends Model {
+  static boot() {
+    super.boot()
+    this.addTrait('@provider:SoftDeletes')
+  }
+
+  static get updatedAtColumn() {
+    return 'users.updated_at'
+  }
+}
  ...
 ```
 

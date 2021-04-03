@@ -27,7 +27,7 @@ class SoftDeletes {
       await Model.$hooks.before.exec('softdelete', this)
 
       if (!(await this.isSoftDeleted())) {
-        this[`${options.tableName}.${options.fieldName}`] = Model.formatDates(`${options.fieldName}`, new Date());
+        this[`${options.fieldName}`] = Model.formatDates(`${options.fieldName}`, new Date());
         await this.save();
         this.freeze();
       }
@@ -65,7 +65,7 @@ class SoftDeletes {
       await Model.$hooks.before.exec('restore', this)
       if (await this.isSoftDeleted()) {
         this.unfreeze();
-        this[`${options.tableName}.${options.fieldName}`] = null;
+        this[`${options.fieldName}`] = null;
         await this.save();
       }
       await Model.$hooks.after.exec('restore', this)
@@ -73,7 +73,7 @@ class SoftDeletes {
     }
 
     Model.prototype.isSoftDeleted = async function () {
-      return this[`${options.tableName}.${options.fieldName}`] != null;
+      return this[`${options.fieldName}`] != null;
     }
 
     Model.queryMacro('withTrashed', function () {
