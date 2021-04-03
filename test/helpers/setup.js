@@ -9,8 +9,6 @@
  * file that was distributed with this source code.
 */
 
-const path = require('path')
-const fs = require('fs')
 const { registrar, ioc } = require('@adonisjs/fold')
 const { setupResolver, Config } = require('@adonisjs/sink')
 
@@ -29,14 +27,27 @@ module.exports = {
         }
       })
 
+      config.set('database', {
+        connection: 'mysql',
+        mysql: {
+          client: 'mysql',
+          connection: {
+            host: "localhost",
+            port: 3306,
+            user: "root",
+            password: "test",
+            database: "adonis-soft-deletes"
+          }
+        }
+      })
+
       return config
     })
 
     return registrar
       .providers([
-        '@adonisjs/lucid/providers/LucidProvider',
-        '@backspacerhino/soft-deletes/providers/SoftDeletesProvider'
-      ])
+        '@adonisjs/lucid/providers/LucidProvider'
+            ])
       .registerAndBoot()
       .then(() => {
         const schema = ioc.use('Database').schema
@@ -74,8 +85,8 @@ module.exports = {
     return ioc
       .use('Database')
       .schema
-      .dropTable('users')
-      .dropTable('cars')
       .dropTable('test_models')
+      .dropTable('cars')
+      .dropTable('users')
   }
 }

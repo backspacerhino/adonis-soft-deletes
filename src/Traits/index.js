@@ -2,11 +2,7 @@
 /**
  * adonis-soft-deletes
  *
-<<<<<<< HEAD
- * (c) Mario Ercegovac <helpereiden@gmail.com>
-=======
  * (c) BackspaceRhino
->>>>>>> origin/v2
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -15,14 +11,15 @@
 class SoftDeletes {
 
   register(Model, customOptions = {}) {
-    const defaultOptions = { fieldName: "deleted_at" }
+    const defaultOptions = { tableName: Model.table, fieldName: "deleted_at" }
     const options = Object.assign(defaultOptions, customOptions)
 
     Model.$hooks.before._events.push("softdelete")
     Model.$hooks.after._events.push("softdelete")
 
+
     Model.addGlobalScope(builder => {
-      builder.whereNull(options.fieldName);
+      builder.whereNull(`${options.tableName}.${options.fieldName}`);
     }, 'soft_deletes');
 
 
@@ -30,7 +27,7 @@ class SoftDeletes {
       await Model.$hooks.before.exec('softdelete', this)
 
       if (!(await this.isSoftDeleted())) {
-        this[options.fieldName] = Model.formatDates(`${options.fieldName}`, new Date());
+        this[`${options.tableName}.${options.fieldName}`] = Model.formatDates(`${options.fieldName}`, new Date());
         await this.save();
         this.freeze();
       }
@@ -41,13 +38,13 @@ class SoftDeletes {
 
     Model.prototype.forceDelete = async function () {
       await Model.$hooks.before.exec('delete', this)
-      
+
       const affected = await Model
         .query()
         .where(Model.primaryKey, this.primaryKeyValue)
         .ignoreScopes()
         .query
-        .delete()      
+        .delete()
 
       /**
        * If model was delete then freeze it modifications
@@ -68,7 +65,7 @@ class SoftDeletes {
       await Model.$hooks.before.exec('restore', this)
       if (await this.isSoftDeleted()) {
         this.unfreeze();
-        this[options.fieldName] = null;
+        this[`${options.tableName}.${options.fieldName}`] = null;
         await this.save();
       }
       await Model.$hooks.after.exec('restore', this)
@@ -76,7 +73,7 @@ class SoftDeletes {
     }
 
     Model.prototype.isSoftDeleted = async function () {
-      return this[options.fieldName] != null;
+      return this[`${options.tableName}.${options.fieldName}`] != null;
     }
 
     Model.queryMacro('withTrashed', function () {
@@ -88,7 +85,7 @@ class SoftDeletes {
     Model.queryMacro('onlyTrashed', function () {
       this.ignoreScopes(['soft_deletes']);
       this._applyScopes()
-      this.whereNotNull(options.fieldName);
+      this.whereNotNull(`${options.tableName}.${options.fieldName}`);
       return this;
     });
 
@@ -102,7 +99,7 @@ class SoftDeletes {
       }
 
       let updateObj = {}
-      updateObj[options.fieldName] = Model.formatDates(`${options.fieldName}`, new Date())
+      updateObj[`${options.tableName}.${options.fieldName}`] = Model.formatDates(`${options.fieldName}`, new Date())
       const ret = this.update(updateObj)
 
       if (Model.$hooks) {
@@ -124,11 +121,8 @@ class SoftDeletes {
         await Model.$hooks.before.exec('restore', modelInstances)
       }
 
-      
-
       let updateObj = {}
-      updateObj[options.fieldName] = null
-
+      updateObj[`${options.tableName}.${options.fieldName}`] = null
       await this.update(updateObj)
 
       if (Model.$hooks) {

@@ -79,13 +79,13 @@ test.group('Soft deletes', group => {
         let sqlObj = await TestModel.query().onlyTrashed().toSQL();
         let rawSQL = sqlObj.sql;
 
-        assert.strictEqual(rawSQL, "select * from `test_models` where `test` is not null")
+        assert.strictEqual(rawSQL, "select * from `test_models` where `test_models`.`test` is not null")
     })
 
     test("row is soft deleted upon delete", async (assert) => {
         let car = await Car.findBy('name', 'First');
         await car.delete();
-
+        car = await Car.query().withTrashed().where("name", "First").first();
         assert.notStrictEqual(car.deleted_at, null)
     })
 
@@ -156,7 +156,7 @@ test.group('Soft deletes', group => {
         }).first()
 
         const withCount = user.getRelated("cars");
-        
+
         assert.equal(count, withCount.rows.length)
 
     })
