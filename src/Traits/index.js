@@ -108,8 +108,8 @@ class SoftDeletes {
       return ret;
     })
 
-    Model.queryMacro('forceDelete', function () {
-      return this.query.delete()
+    Model.queryMacro('forceDelete', async function () {
+      return await this.query.delete()
     })
 
     Model.queryMacro('restore', async function () {
